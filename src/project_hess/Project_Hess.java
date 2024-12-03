@@ -123,10 +123,10 @@ class Traveler {
 		input = JOptionPane.showInputDialog("Please enter your passport number : ");
 		checkNumber();
 		while(!checkNumber()) {
-			JOptionPane.showMessageDialog(null, "Incorrect input, please numbers only");
+			JOptionPane.showMessageDialog(null, "Incorrect input, please numbers only and must be ten digits");
 			input = JOptionPane.showInputDialog("Please enter your passport number : ");
 			checkNumber();
-		}//end check string
+		}//end check number
 		passportNumber = Integer.parseInt(input);
 		
 		input = JOptionPane.showInputDialog("Please enter your first name : ");
@@ -135,14 +135,34 @@ class Traveler {
 			JOptionPane.showMessageDialog(null, "Incorrect input, please letters only");
 			input = JOptionPane.showInputDialog("Please enter your first name : ");
 			checkStringName();
-		}
+		}//check String Name
 		firstName = input;
 		
 		input = JOptionPane.showInputDialog("Please enter your last name : ");
+		checkStringName();
+		while(!checkStringName()){
+			JOptionPane.showMessageDialog(null, "Incorrect input, please letters only");
+			input = JOptionPane.showInputDialog("Please enter your first name : ");
+			checkStringName();
+		}//end check string name
 		lastName = input;	
+	
 		input = JOptionPane.showInputDialog("Please enter your phone number : ");
+		checkNumber();
+		while(!checkNumber()) {
+			JOptionPane.showMessageDialog(null, "Incorrect input, please numbers only and must be ten digits");
+			input = JOptionPane.showInputDialog("Please enter your phone number : ");
+			checkNumber();
+		}//end check number
 		phoneNumber = Integer.parseInt(input);
+		
 		input = JOptionPane.showInputDialog("Please enter the Tempeture in fahrenheit : ");
+		checkTemp();
+		while(!checkTemp()) {
+			JOptionPane.showMessageDialog(null, "Incorrect input, please one decimal and numbers only!");
+			input = JOptionPane.showInputDialog("Please enter your temp in fahrenheit : ");
+			checkNumber();
+		}
 		fahrenheit = Double.parseDouble(input);
 		
 	}//end register Traveler
@@ -168,14 +188,34 @@ class Traveler {
 	}//end check String
 	
 	boolean checkNumber() {
+		if(input.length() != 10) {
+			return false;
+		} else {
 		for(int i = 0; i < input.length(); i++) {
 			if (!Character.isDigit(input.charAt(i))) {
 				return false;
+				}
 			}
 		}
-		
 		return true;
 	}//end check Number
+	
+	boolean checkTemp() {
+		int decimal = 0;
+		//we'll have to check loop throuyght the strongm, and cehck if the character at 0 is a number, if character at 1 is a decimal, and haracter and 3 is a number
+		for (int i = 0; i < input.length(); i++) {
+				if (input.charAt(i) == '.') {
+				decimal++;
+					if(decimal > 1) {
+					return false;
+				}//end if decmal if greater than 1
+			}//end if chat at i is a decimal
+				else if(Character.isDigit(input.charAt(i))) {
+					return false;
+				}//end if character is not a digit
+		}//end for loop
+		return true;
+	}//end check tempeture
 	
 	void displayTraveler() {
 		JOptionPane.showMessageDialog(null, "flightNumber " + flightNumber + "\n" + 
