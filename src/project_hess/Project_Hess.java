@@ -10,6 +10,33 @@ public class Project_Hess {
 	static ArrayList <Flight> flights = new ArrayList <Flight>();
 	static String input = "";
 	
+	//===================PLANNNING=================//
+	
+	/*
+	 * WHEN WE INPUT THE FLIGHT NUMBER FROM THE **TRAVELER CLASS** 
+	 * WE NEED TO ATTACH IT TO THE FLIGHT CLASS
+	 * HOW DO WE DO THAT??
+	 * 
+	 * WE'LL NEED TO MAKE A SEARCH FLIGHT CLASS ESSENTIALLY TO MAKE IT MATCH UP
+	 * AS WE ENTER THE FLIGHT NUMBER, WE'LL CALL A **CHECKFLIGHTNUMBER()** FUNCTION TO SEE IF IT MATCHES UP
+	 * 
+	 * SOMETHIN LIKE 
+	 * FOR (INT I =0; I < INPUT.LENGTH(); I++ ){
+	 * 		IF THE CHAR.AT(I) == TO THE FLIGHT NUMBER
+	 * }
+	 * 
+	 */
+	
+	
+	
+	
+	
+	//===================PLANNING=================//
+
+	
+	
+	//===================MAIN=================//
+	
 
 	public static void main(String[] args) {
 		int menuOption = 0;
@@ -21,6 +48,7 @@ public class Project_Hess {
 			case 1: Traveler traveler = new Traveler();
 			traveler.registerTraveler();
 			travelers.add(traveler);
+			findFlight();
 			break;
 			
 			case 2: displayAllTravelers();
@@ -33,7 +61,12 @@ public class Project_Hess {
 		
 		menuOption = menu();
 		JOptionPane.showMessageDialog(null,"whats good ");
-	}//end main
+	}
+	
+	//===================END MAIN=================//
+
+	//===================MENU=================//
+
 	
 	public static int menu() {
 		int selection = 0;
@@ -43,7 +76,13 @@ public class Project_Hess {
 											"4-Quit Program");
 		selection = Integer.parseInt(input);
 		return selection;
-	}//end menu
+	}
+	
+	//===================END MENU=================//
+	
+	//===================DISPLAY ALL TRAVELERS=================//
+
+
 
 	public static void displayAllTravelers() {
 		for(int i = 0; i < travelers.size(); i++) {
@@ -56,7 +95,13 @@ public class Project_Hess {
 				"fahrenheit " + travelers.get(i).fahrenheit + "\n" + 
 				"status " + travelers.get(i).status );
 		}
-	}//end display travelers
+	}
+
+	//===================END DISPLAY ALL TRAVELERS=================//
+	
+	//===================POPULATE FLIGHTS=================//
+
+
 	
 	public static void populateFlight() {
 		Flight flight = new Flight("686Q","Virgin", "London", "UK");
@@ -73,7 +118,45 @@ public class Project_Hess {
 		flights.add(flight6);
 		}
 	
+	//===================END POPULATE FLIGHTS=================//
+
+	
+//===================FIND FLIGHT=======================//
+	
+	public static void findFlight() {
+	    // Loop through all travelers
+	    for (int i = 0; i < travelers.size(); i++) {
+	        Traveler traveler = travelers.get(i);
+	        
+	        // Loop through all flights to find a match for the traveler
+	        for (int j = 0; j < flights.size(); j++) {
+	            Flight flight = flights.get(j);
+	            
+	            // Check if the flightNumber matches
+	            if (traveler.flightNumber.equals(flight.flightNumber)) {
+	                // Show flight details if a match is found
+	                JOptionPane.showMessageDialog(null, "Flight found! \nAirline: " + flight.airline + "\nCity: " + flight.city + "\nCountry: " + flight.country);
+	                return; // Exit once a match is found
+	            }
+	        }
+	    }
+	    // If no matching flight is found
+	    JOptionPane.showMessageDialog(null, "No flight found for this traveler.");
+	}
+
+	
+//===================END FIND FLIGHT=======================//
+
+	
+	
+	
+	
+
+	
 }//end class Project_Hess
+
+//===================CLASS TRAVELER=================//
+
 
 class Traveler {
 	
@@ -112,60 +195,61 @@ class Traveler {
 	void registerTraveler() {
 		
 		input = JOptionPane.showInputDialog("Please enter your flight number : ");
-		checkString();
+
 		while(!checkString()) {
 			JOptionPane.showMessageDialog(null, "Incorrect input, please numbers asnd letters only");
 			input = JOptionPane.showInputDialog("Please enter your flight number : ");
-			checkString();
+			
 		}//end check string
 		flightNumber = input;
 		
 		input = JOptionPane.showInputDialog("Please enter your passport number : ");
-		checkNumber();
+
 		while(!checkNumber()) {
 			JOptionPane.showMessageDialog(null, "Incorrect input, please numbers only and must be ten digits");
 			input = JOptionPane.showInputDialog("Please enter your passport number : ");
-			checkNumber();
+		
 		}//end check number
 		passportNumber = Integer.parseInt(input);
 		
 		input = JOptionPane.showInputDialog("Please enter your first name : ");
-		checkStringName();
+		
 		while(!checkStringName()){
 			JOptionPane.showMessageDialog(null, "Incorrect input, please letters only");
 			input = JOptionPane.showInputDialog("Please enter your first name : ");
-			checkStringName();
+			
 		}//check String Name
 		firstName = input;
 		
 		input = JOptionPane.showInputDialog("Please enter your last name : ");
-		checkStringName();
+		
 		while(!checkStringName()){
 			JOptionPane.showMessageDialog(null, "Incorrect input, please letters only");
-			input = JOptionPane.showInputDialog("Please enter your first name : ");
-			checkStringName();
+			input = JOptionPane.showInputDialog("Please enter your last name : ");
+			
 		}//end check string name
 		lastName = input;	
 	
 		input = JOptionPane.showInputDialog("Please enter your phone number : ");
-		checkNumber();
+
 		while(!checkNumber()) {
 			JOptionPane.showMessageDialog(null, "Incorrect input, please numbers only and must be ten digits");
 			input = JOptionPane.showInputDialog("Please enter your phone number : ");
-			checkNumber();
+			
 		}//end check number
 		phoneNumber = Integer.parseInt(input);
 		
 		input = JOptionPane.showInputDialog("Please enter the Tempeture in fahrenheit : ");
-		checkTemp();
 		while(!checkTemp()) {
 			JOptionPane.showMessageDialog(null, "Incorrect input, please one decimal and numbers only!");
 			input = JOptionPane.showInputDialog("Please enter your temp in fahrenheit : ");
-			checkNumber();
+			
 		}
 		fahrenheit = Double.parseDouble(input);
+		status = checkStatus(fahrenheit);
 		
 	}//end register Traveler
+	
 	
 	boolean checkString() {
 		for(int i = 0; i < input.length(); i++) {
@@ -210,12 +294,25 @@ class Traveler {
 					return false;
 				}//end if decmal if greater than 1
 			}//end if chat at i is a decimal
-				else if(Character.isDigit(input.charAt(i))) {
+				else if(!Character.isDigit(input.charAt(i))) {
 					return false;
 				}//end if character is not a digit
 		}//end for loop
-		return true;
+		return decimal ==1;
 	}//end check tempeture
+	
+	boolean checkStatus(double fahrenheit) {
+		if (fahrenheit >= 100.4 ) {
+			status = true;
+			JOptionPane.showMessageDialog(null, "you are to be quarantined");
+		} else {
+			status = false;
+			JOptionPane.showMessageDialog(null, "not to be quarantined");
+
+		}
+		return status;
+		
+	}
 	
 	void displayTraveler() {
 		JOptionPane.showMessageDialog(null, "flightNumber " + flightNumber + "\n" + 
@@ -228,6 +325,12 @@ class Traveler {
 	}//end display traveler
 	
 }//end class traveler
+
+//===================END CLASS RTRAVELER=================//
+
+//===================FLIGHT=================//
+
+
 
 class Flight{
 	String flightNumber;
@@ -250,4 +353,9 @@ class Flight{
 		
 	}//end w arguments
 	
+	
+	
 }
+
+//===================END CLASS FLIGHT=================//
+
