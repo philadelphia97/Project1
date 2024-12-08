@@ -27,7 +27,7 @@ public class Project_Hess {
 	public static void main(String[] args) throws FileNotFoundException, IOException, ClassNotFoundException {
 		int menuOption = 0;
 		int foundAt = -1;
-		int searchNumber = 0;
+		long searchNumber = 0;
 		
 		while (menuOption != 4) {
 			menuOption = menu();
@@ -45,7 +45,7 @@ public class Project_Hess {
 			
 			case 3: input = JOptionPane.showInputDialog("please enter the travelers passport number you would like to search for :");
 			
-			searchNumber = Integer.parseInt(input);
+			searchNumber = Long.parseLong(input);
 			foundAt = searchTraveler(searchNumber);
 			if (foundAt == -1) {
 				JOptionPane.showMessageDialog(null, searchNumber + "was not found");
@@ -94,6 +94,9 @@ public class Project_Hess {
 	}
 	
 	//===================END MAIN=================//
+	
+	
+	
 
 	//===================MENU=================//
 
@@ -109,6 +112,9 @@ public class Project_Hess {
 	}
 	
 	//===================END MENU=================//
+	
+	
+	
 	
 	//===================DISPLAY ALL TRAVELERS=================//
 
@@ -132,6 +138,7 @@ public class Project_Hess {
 	
 	
 	
+	
 	//===================DISPLAY QUARANTINED TRAVELERS=================//
 	
 	public static void displayQuarantinedTravelers() {
@@ -148,6 +155,7 @@ public class Project_Hess {
 	
 	
 	//===================END DISPLAY QUARANTINED TRAVELERS=================//
+	
 	
 	
 
@@ -172,28 +180,34 @@ public class Project_Hess {
 		}
 	
 	//===================END POPULATE FLIGHTS=================//
+	
+	
+	
 
 	
 //===================FIND FLIGHT=======================//
 	
 	public static void findFlight() {
+		boolean flightFound = false;
 	   for(int i = 0; i < travelers.size(); i++) {
 		   //Traveler traveler = travelers.get(i)
 		   
 		   for(int j = 0; j< flights.size(); j++) {
 			   //Flight flight = flights.get(j)
 			   
-			   if(travelers.get(i).flightNumber.equals(flights.get(j).flightNumber)) {
+			   if(travelers.get(i).flightNumber.equalsIgnoreCase(flights.get(j).flightNumber)) {
 				   JOptionPane.showMessageDialog(null, "flight found! " + 
 						   			"\nAirline : " + flights.get(j).airline +
 						   			"\nCity : " + flights.get(j).city +
 						   			"\nCountry : " + flights.get(j).country);
-						   								
+						   			flightFound = true;					
 			   }
 		   }//end for j
 	   }//end for i
 	   
-	   JOptionPane.showMessageDialog(null, "no flight found!");
+	   if (!flightFound) {
+		   JOptionPane.showMessageDialog(null, "no flight found!");
+	   }
 	}//end findFlight()
 
 	
@@ -201,23 +215,25 @@ public class Project_Hess {
 	
 	
 	
+	
+	
+	
 //===================SEARCH TRAVELER=======================//
 	
-	public static int searchTraveler(int searchNumber) {
+	public static int searchTraveler(long searchNumber) {
 		
 		for(int i = 0; i < travelers.size(); i++) {
 			if (searchNumber == travelers.get(i).passportNumber) {
 				return i;
 			}//end if search
-				else {
-					i++;
-				}//end else
 		}//end for
 		return -1;
 		
 	}//end searchTraveler
 	
 //===================END SEARCH TRAVELER=======================//
+	
+	
 	
 
 	
@@ -238,10 +254,10 @@ class Traveler implements Serializable {
 	static String input = "";
 	
 	String flightNumber;
-	int passportNumber;
+	long passportNumber;
 	String firstName;
 	String lastName;
-	int phoneNumber;
+	long phoneNumber;
 	double fahrenheit;
 	boolean status;
 	
@@ -255,7 +271,7 @@ class Traveler implements Serializable {
 		status = false;
 	}//no constructors
 	
-	Traveler(String flightNumber, int passportNumber, String firstName, String lastName, int phoneNumber, double fahrenheit,boolean status){
+	Traveler(String flightNumber, long passportNumber, String firstName, String lastName, long phoneNumber, double fahrenheit,boolean status){
 		this.flightNumber = flightNumber;
 		this.passportNumber = passportNumber;
 		this.firstName = firstName;
@@ -285,7 +301,7 @@ class Traveler implements Serializable {
 			input = JOptionPane.showInputDialog("Please enter your passport number : ");
 		
 		}//end check number
-		passportNumber = Integer.parseInt(input);
+		passportNumber = Long.parseLong(input);
 		
 		input = JOptionPane.showInputDialog("Please enter your first name : ");
 		
@@ -312,7 +328,7 @@ class Traveler implements Serializable {
 			input = JOptionPane.showInputDialog("Please enter your phone number : ");
 			
 		}//end check number
-		phoneNumber = Integer.parseInt(input);
+		phoneNumber = Long.parseLong(input);
 		
 		input = JOptionPane.showInputDialog("Please enter the Tempeture in fahrenheit : ");
 		while(!checkTemp()) {
@@ -324,6 +340,10 @@ class Traveler implements Serializable {
 		status = checkStatus(fahrenheit);
 		
 	}//end register Traveler
+	
+	
+	
+	//=============INPUT VALIDATION===========//
 	
 	
 	boolean checkString() {
@@ -361,13 +381,13 @@ class Traveler implements Serializable {
 	
 	boolean checkTemp() {
 		int decimal = 0;
-		//we'll have to check loop throuyght the strongm, and cehck if the character at 0 is a number, if character at 1 is a decimal, and haracter and 3 is a number
+		//we'll have to check loop through the string, and check if the character at 0 is a number, if character at 1 is a decimal, and character and 3 is a number
 		for (int i = 0; i < input.length(); i++) {
 				if (input.charAt(i) == '.') {
 				decimal++;
 					if(decimal > 1) {
 					return false;
-				}//end if decmal if greater than 1
+				}//end if decimal if greater than 1
 			}//end if chat at i is a decimal
 				else if(!Character.isDigit(input.charAt(i))) {
 					return false;
@@ -375,6 +395,7 @@ class Traveler implements Serializable {
 		}//end for loop
 		return decimal ==1;
 	}//end check tempeture
+	
 	
 	boolean checkStatus(double fahrenheit) {
 		if (fahrenheit >= 100.4 ) {
@@ -389,6 +410,13 @@ class Traveler implements Serializable {
 		
 	}
 	
+	
+	//=============END INPUT VALIDATION===========//
+	
+	
+	
+	
+	
 	void displayTraveler() {
 		JOptionPane.showMessageDialog(null, "flightNumber : " + flightNumber + "\n" + 
 											"passport number : " + passportNumber + "\n" +
@@ -400,6 +428,10 @@ class Traveler implements Serializable {
 	}//end display traveler
 	
 }//end class traveler
+
+
+
+
 
 //===================END CLASS RTRAVELER=================//
 
