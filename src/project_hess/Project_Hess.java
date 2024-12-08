@@ -1,5 +1,12 @@
 package project_hess;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
@@ -10,35 +17,14 @@ public class Project_Hess {
 	static ArrayList <Flight> flights = new ArrayList <Flight>();
 	static String input = "";
 	
-	//===================PLANNNING=================//
 	
-	/*
-	 * WHEN WE INPUT THE FLIGHT NUMBER FROM THE **TRAVELER CLASS** 
-	 * WE NEED TO ATTACH IT TO THE FLIGHT CLASS
-	 * HOW DO WE DO THAT??
-	 * 
-	 * WE'LL NEED TO MAKE A SEARCH FLIGHT CLASS ESSENTIALLY TO MAKE IT MATCH UP
-	 * AS WE ENTER THE FLIGHT NUMBER, WE'LL CALL A **CHECKFLIGHTNUMBER()** FUNCTION TO SEE IF IT MATCHES UP
-	 * 
-	 * SOMETHIN LIKE 
-	 * FOR (INT I =0; I < INPUT.LENGTH(); I++ ){
-	 * 		IF THE CHAR.AT(I) == TO THE FLIGHT NUMBER
-	 * }
-	 * 
-	 */
-	
-	
-	
-	
-	
-	//===================PLANNING=================//
 
 	
 	
 	//===================MAIN=================//
 	
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws FileNotFoundException, IOException, ClassNotFoundException {
 		int menuOption = 0;
 		int foundAt = -1;
 		int searchNumber = 0;
@@ -68,10 +54,38 @@ public class Project_Hess {
 			}
 			break;
 			
-			case 4: JOptionPane.showMessageDialog(null,"goodbye now.");
+			case 4: displayQuarantinedTravelers();
 			
+			JOptionPane.showMessageDialog(null, "press OK to write all files to a file - ");
+			try(FileOutputStream outFile = new FileOutputStream("travelers");
+					ObjectOutputStream outObject = new ObjectOutputStream(outFile)) {
+				for (Traveler t : travelers) {
+					outObject.writeObject(t);
+				}//end for
+			}//end output stream
+			
+			JOptionPane.showMessageDialog(null, "hit ok to read all records from file - ");
+			try (FileInputStream inFile = new FileInputStream("travelers");
+					ObjectInputStream inObject = new ObjectInputStream(inFile)) {
+				ArrayList <Traveler> readTravelerList = new ArrayList <Traveler>();
+				while (inFile.available() > 0) {
+					Traveler readTraveler = (Traveler) inObject.readObject();
+					readTravelerList.add(readTraveler);
+				}
+				JOptionPane.showMessageDialog(null, "Hit ok to display records - ");
+				for (Traveler t : readTravelerList) {
+					t.displayTraveler();
+				}
 			}
-		}
+			
+			
+			
+			
+			
+				JOptionPane.showMessageDialog(null,"goodbye now.");
+			
+			}//end switch menu
+		}//end while menu
 		
 		
 		
@@ -113,7 +127,30 @@ public class Project_Hess {
 		}
 	}
 
+
 	//===================END DISPLAY ALL TRAVELERS=================//
+	
+	
+	
+	//===================DISPLAY QUARANTINED TRAVELERS=================//
+	
+	public static void displayQuarantinedTravelers() {
+		for(int i = 0; i < travelers.size(); i ++) {
+			if (travelers.get(i).status == true) {
+				JOptionPane.showMessageDialog(null, "Travelers that need to be quarantined : ");
+				travelers.get(i).displayTraveler();
+			} else {
+				JOptionPane.showMessageDialog(null, "no travelers need to be quarentined");
+			}
+		}//end for
+	}//end method
+	
+	
+	
+	//===================END DISPLAY QUARANTINED TRAVELERS=================//
+	
+	
+
 	
 	//===================POPULATE FLIGHTS=================//
 
@@ -182,13 +219,6 @@ public class Project_Hess {
 	
 //===================END SEARCH TRAVELER=======================//
 	
-//===================COUNT QURANTINE=======================//
-	
-public static void countQuarantine() {
-	
-}
-	
-//===================END COUNT QURANTINE=======================//
 
 	
 	
@@ -201,8 +231,10 @@ public static void countQuarantine() {
 //===================CLASS TRAVELER=================//
 
 
-class Traveler {
+class Traveler implements Serializable {
 	
+	private static final long serialVersionUID = 1L;
+
 	static String input = "";
 	
 	String flightNumber;
