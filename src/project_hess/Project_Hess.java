@@ -40,12 +40,15 @@ public class Project_Hess {
 
 	public static void main(String[] args) {
 		int menuOption = 0;
+		int foundAt = -1;
+		int searchNumber = 0;
 		
 		while (menuOption != 4) {
 			menuOption = menu();
 			switch(menuOption) {
 				
 			case 1: Traveler traveler = new Traveler();
+			populateFlight();
 			traveler.registerTraveler();
 			travelers.add(traveler);
 			findFlight();
@@ -54,13 +57,26 @@ public class Project_Hess {
 			case 2: displayAllTravelers();
 			break;
 			
+			case 3: input = JOptionPane.showInputDialog("please enter the travelers passport number you would like to search for :");
+			
+			searchNumber = Integer.parseInt(input);
+			foundAt = searchTraveler(searchNumber);
+			if (foundAt == -1) {
+				JOptionPane.showMessageDialog(null, searchNumber + "was not found");
+			}else {
+				travelers.get(foundAt).displayTraveler();
+			}
+			break;
+			
+			case 4: JOptionPane.showMessageDialog(null,"goodbye now.");
+			
 			}
 		}
 		
 		
 		
-		menuOption = menu();
-		JOptionPane.showMessageDialog(null,"whats good ");
+//		menuOption = menu();
+//		JOptionPane.showMessageDialog(null,"whats good ");
 	}
 	
 	//===================END MAIN=================//
@@ -124,28 +140,55 @@ public class Project_Hess {
 //===================FIND FLIGHT=======================//
 	
 	public static void findFlight() {
-	    // Loop through all travelers
-	    for (int i = 0; i < travelers.size(); i++) {
-	        Traveler traveler = travelers.get(i);
-	        
-	        // Loop through all flights to find a match for the traveler
-	        for (int j = 0; j < flights.size(); j++) {
-	            Flight flight = flights.get(j);
-	            
-	            // Check if the flightNumber matches
-	            if (traveler.flightNumber.equals(flight.flightNumber)) {
-	                // Show flight details if a match is found
-	                JOptionPane.showMessageDialog(null, "Flight found! \nAirline: " + flight.airline + "\nCity: " + flight.city + "\nCountry: " + flight.country);
-	                return; // Exit once a match is found
-	            }
-	        }
-	    }
-	    // If no matching flight is found
-	    JOptionPane.showMessageDialog(null, "No flight found for this traveler.");
-	}
+	   for(int i = 0; i < travelers.size(); i++) {
+		   //Traveler traveler = travelers.get(i)
+		   
+		   for(int j = 0; j< flights.size(); j++) {
+			   //Flight flight = flights.get(j)
+			   
+			   if(travelers.get(i).flightNumber.equals(flights.get(j).flightNumber)) {
+				   JOptionPane.showMessageDialog(null, "flight found! " + 
+						   			"\nAirline : " + flights.get(j).airline +
+						   			"\nCity : " + flights.get(j).city +
+						   			"\nCountry : " + flights.get(j).country);
+						   								
+			   }
+		   }//end for j
+	   }//end for i
+	   
+	   JOptionPane.showMessageDialog(null, "no flight found!");
+	}//end findFlight()
 
 	
 //===================END FIND FLIGHT=======================//
+	
+	
+	
+//===================SEARCH TRAVELER=======================//
+	
+	public static int searchTraveler(int searchNumber) {
+		
+		for(int i = 0; i < travelers.size(); i++) {
+			if (searchNumber == travelers.get(i).passportNumber) {
+				return i;
+			}//end if search
+				else {
+					i++;
+				}//end else
+		}//end for
+		return -1;
+		
+	}//end searchTraveler
+	
+//===================END SEARCH TRAVELER=======================//
+	
+//===================COUNT QURANTINE=======================//
+	
+public static void countQuarantine() {
+	
+}
+	
+//===================END COUNT QURANTINE=======================//
 
 	
 	
@@ -315,13 +358,13 @@ class Traveler {
 	}
 	
 	void displayTraveler() {
-		JOptionPane.showMessageDialog(null, "flightNumber " + flightNumber + "\n" + 
-											"passport number " + passportNumber + "\n" +
-											"first name " + firstName + "\n" + 
-											"last Name " + lastName + "\n" + 
+		JOptionPane.showMessageDialog(null, "flightNumber : " + flightNumber + "\n" + 
+											"passport number : " + passportNumber + "\n" +
+											"first name : " + firstName + "\n" + 
+											"last Name : " + lastName + "\n" + 
 											"phone number :  " + phoneNumber + "\n" + 
-											"fahrenheit " + fahrenheit + "\n" + 
-											"status " + status );
+											"fahrenheit : " + fahrenheit + "\n" + 
+											"status : " + status );
 	}//end display traveler
 	
 }//end class traveler
